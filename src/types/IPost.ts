@@ -1,5 +1,5 @@
 export default interface IPost {
-  //ADD MESSAGE
+  //געג
   id: number;
   subject: string;
   body: string;
