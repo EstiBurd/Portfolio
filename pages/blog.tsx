@@ -6,30 +6,36 @@ import { getServerAbsolteUrl } from '../src/utils/server/server-utils';
 import MuiSnackbar from '../src/components/get-ui/MuiSnackbar';
 import { AlertColor } from '@mui/material';
 
-export async function getStaticProps() {
-    //--get posts
-    let posts: IPost[] = [];
-    const url = path.join(getServerAbsolteUrl(), '/api/posts');
-    let sevirity:AlertColor;
-    let message:string="";
-    try {
-        const response = await fetch(url);
-        posts = await response.json();
-        sevirity='success'
-    } catch (error) {
-        sevirity='error';
-        message='Fetch error'
-        console.error(error);
-    }
-    return {
-        props: { posts,sevirity, message }, // will be passed to the page component as props
-    }
-}
 interface IProps {
     posts: IPost[];
     sevirity:AlertColor;
     message:string;
 }
+export async function getStaticProps() {
+
+    let props:IProps={
+        posts: [],
+        sevirity: 'success',
+        message: ''
+    }
+    //--get posts
+    
+    const url = path.join(getServerAbsolteUrl(), '/api/posts');
+    
+    try {
+        const response = await fetch(url);
+        props.posts = await response.json();
+        props.sevirity='success'
+    } catch (error) {
+        props.sevirity='error';
+        props.message='Fetch error'
+        console.error(error);
+    }
+    return {
+        props, // will be passed to the page component as props
+    }
+}
+
 const Blog: FC<IProps> = ({ posts,sevirity, message}) => {
     const items: ISimpleAccordionItem[] = posts.map(post => {
         return { summary: post.subject, details: post.body };
