@@ -2,11 +2,11 @@ import { AlertColor } from '@mui/material';
 import Link from 'next/link';
 import path from 'path';
 import React, { FC } from 'react';
-import MuiSnackbar from '../../src/components/get-ui/MuiSnackbar';
-import ICommentShort from '../../src/types/ICommentShort';
-import { getServerAbsolteUrl } from '../../src/utils/server/server-utils';
+import MuiSnackbar from 'src/components/get-ui/MuiSnackbar';
+import ICommentShort from 'src/types/ICommentShort';
+import { getServerAbsolteUrl } from 'src/utils/server/server-utils';
 import {AiOutlineFileAdd,AiOutlineDelete,AiOutlineInfoCircle,AiFillEdit} from 'react-icons/ai';
-import styles from '../../styles/comments.module.css';
+import styles from 'styles/comments.module.css';
 
 interface IProps {
     commentsShort: ICommentShort[];
@@ -18,8 +18,8 @@ export async function getServerSideProps() {
     
     let props:IProps={
         commentsShort: [],
-        sevirity: 'success',
-        message: ''
+        sevirity: "success",
+        message: ""
     }
     const url = path.join(getServerAbsolteUrl(), '/api/comments');
     try {
@@ -40,12 +40,19 @@ export async function getServerSideProps() {
 const Comments: FC<IProps> = ({ commentsShort, sevirity, message }) => {
     console.log(commentsShort);
     const elems=commentsShort.map((it,i)=><div className={styles.grid_container} key={i}>
-        <span>{it.description}</span><AiOutlineDelete/><AiFillEdit/><AiOutlineInfoCircle/>
+        <span>{it.description}</span>
+        <AiOutlineDelete/>
+        <AiFillEdit/>
+        <Link href={`/comments/${it.id}`}>
+        <AiOutlineInfoCircle/>
+        </Link>
     </div>)
     return (
         <div className={styles.comments}>
             <h2>Comments</h2>
+            <Link href='/comments/create'> 
 <AiOutlineFileAdd/>
+</Link>
 {elems}
             {(sevirity != 'success') ? <MuiSnackbar
                 isOpen={true}
